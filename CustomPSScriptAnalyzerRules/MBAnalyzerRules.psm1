@@ -1,8 +1,4 @@
-﻿$ParsedCode = [System.Management.Automation.Language.Parser]::ParseFile("C:\Users\mbuisson\Desktop\InstallScripts\ApplyClientConfigurationBegin.ps1", [ref]$null, [ref]$null)
-
-$VariableAssignments = $ParsedCode.FindAll( {$args[0] -is [System.Management.Automation.Language.AssignmentStatementAst] }, $True )
-
-<#
+﻿<#
 .SYNOPSIS
     The variables names should be in PascalCase.
 

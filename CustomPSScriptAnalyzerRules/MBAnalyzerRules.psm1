@@ -1,11 +1,13 @@
-﻿<#
+﻿#Requires -Version 3.0
+Function Measure-PascalCase {
+<#
 .SYNOPSIS
     The variables names should be in PascalCase.
 
 .DESCRIPTION
-    The variable names should use a consistent capitalization style, in particular for this rule : PascalCase.
-    In PascalCase, only the first letter is capitalized. Or, if the name is made of multiple concatenated words, only the first letter of each concatenated word are capitalized.
-    To fix a violation of this rule, please consider using PascalCase for the variable names.
+    Variable names should use a consistent capitalization style, i.e. : PascalCase.
+    In PascalCase, only the first letter is capitalized. Or, if the variable name is made of multiple concatenated words, only the first letter of each concatenated word is capitalized.
+    To fix a violation of this rule, please consider using PascalCase for variable names.
 
 .EXAMPLE
     Measure-PascalCase -ScriptBlockAst $ScriptBlockAst
@@ -20,7 +22,7 @@
     https://msdn.microsoft.com/en-us/library/dd878270(v=vs.85).aspx
     https://msdn.microsoft.com/en-us/library/ms229043(v=vs.110).aspx
 #>
-Function Measure-PascalCase {
+
     [CmdletBinding()]
     [OutputType([Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
     Param
@@ -57,13 +59,16 @@ Function Measure-PascalCase {
             [System.Management.Automation.Language.Ast[]]$RegexAst = $ScriptBlockAst.FindAll($Predicate, $True)
 
             If ($RegexAst.Count -ne 0) {
-                $Result = New-Object `
-                        -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
-                        -ArgumentList "The variables names should be in PascalCase.",$RegexAst.Extent,$PSCmdlet.MyInvocation.InvocationName,Information,$null
-          
-                $Results += $Result
-            }
 
+                Foreach ($Violation in $RegexAst) {
+
+                    $Result = New-Object `
+                            -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
+                            -ArgumentList "$((Get-Help $MyInvocation.MyCommand.Name).Description.Text)",$Violation.Extent,$PSCmdlet.MyInvocation.InvocationName,Information,$Null
+          
+                    $Results += $Result
+                }
+            }
             return $Results
             #endregion
         }

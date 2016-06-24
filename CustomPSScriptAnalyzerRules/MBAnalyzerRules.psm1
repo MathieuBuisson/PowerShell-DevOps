@@ -56,11 +56,11 @@ Function Measure-PascalCase {
             #endregion
 
             #region Finds ASTs that match the predicates.
-            [System.Management.Automation.Language.Ast[]]$RegexAst = $ScriptBlockAst.FindAll($Predicate, $True)
+            [System.Management.Automation.Language.Ast[]]$Violations = $ScriptBlockAst.FindAll($Predicate, $True)
 
-            If ($RegexAst.Count -ne 0) {
+            If ($Violations.Count -ne 0) {
 
-                Foreach ($Violation in $RegexAst) {
+                Foreach ($Violation in $Violations) {
 
                     $Result = New-Object `
                             -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
@@ -77,4 +77,4 @@ Function Measure-PascalCase {
         }
     }
 }
-Export-ModuleMember -Function Measure*
+Export-ModuleMember -Function Measure-*

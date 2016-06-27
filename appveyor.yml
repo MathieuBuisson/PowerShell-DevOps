@@ -15,20 +15,34 @@ build: false
 
 test_script:
   - ps: |
-      Add-AppveyorTest -Name "Pester" -Outcome Running
+      Add-AppveyorTest -Name "Pester_ScriptAnalyzerRules" -Outcome Running
       $ScriptAnalyzerRulesTests = Invoke-Pester -Script ".\CustomPSScriptAnalyzerRules\Tests" -PassThru
       $FailedCount = $ScriptAnalyzerRulesTests.FailedCount
       If ($FailedCount -gt 0) {
         Add-AppveyorMessage -Message "$FailedCount.ToString() Pester tests failed.`
         Check the console ouput for details." -Category Error
-        Update-AppveyorTest -Name "Pester" -Outcome Failed -ErrorMessage "$FailedCount.ToString() Pester tests failed."
+        Update-AppveyorTest -Name "Pester_ScriptAnalyzerRules" -Outcome Failed -ErrorMessage "$FailedCount.ToString() Pester tests failed."
 
         # Failing the build
         Throw "Build failed because the Pester tests failed"
       }
       Else {
-        Update-AppveyorTest -Name "Pester" -Outcome Passed
+        Update-AppveyorTest -Name "Pester_ScriptAnalyzerRules" -Outcome Passed
       }
 
   - ps: |
-      Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue
+      Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
+      $ScriptAnalyzerResults = Invoke-ScriptAnalyzer -Path $pwd -Recurse -Severity Error -ErrorAction SilentlyContinue
+      If ($ScriptAnalyzerResults) {
+        $ScriptAnalyzerResultString = $ScriptAnalyzerResults | Out-String
+        Write-Warning $ScriptAnalyzerResultString
+        Add-AppveyorMessage -Message "PSScriptAnalyzer output contained one or more result(s) with 'Error' severity.`
+        Check the 'Tests' tab of this build for more details." -Category Error
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Failed -ErrorMessage $ScriptAnalyzerResultString
+        
+        # Failing the build
+        Throw "Build failed"
+      }
+      Else {
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
+      }

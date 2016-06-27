@@ -1,0 +1,31 @@
+version: 1.0.{build}
+
+os: WMF 5
+
+# Skip on updates to the readme
+skip_commits:
+  message: /readme*/
+  
+install:
+  - ps: Install-PackageProvider -Name NuGet -Force
+  - ps: Install-Module -Name Pester -Force
+  - ps: Install-Module PsScriptAnalyzer -Force
+  
+build: false
+
+test_script:
+  - ps: |
+      Add-AppveyorTest -Name "Pester" -Outcome Running
+      $ScriptAnalyzerRulesTests = Invoke-Pester -Script ".\CustomPSScriptAnalyzerRules\Tests" -PassThru
+      $FailedCount = $ScriptAnalyzerRulesTests.FailedCount
+      If ($FailedCount -gt 0) {
+        Add-AppveyorMessage -Message "$FailedCount.ToString() Pester tests failed.`
+        Check the console ouput for details." -Category Error
+        Update-AppveyorTest -Name "Pester" -Outcome Failed -ErrorMessage "$FailedCount.ToString() Pester tests failed."
+
+        # Failing the build
+        Throw "Build failed because the Pester tests failed"
+      }
+      Else {
+        Update-AppveyorTest -Name "Pester" -Outcome Passed
+      }

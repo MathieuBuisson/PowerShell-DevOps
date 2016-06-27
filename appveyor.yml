@@ -29,3 +29,6 @@ test_script:
       Else {
         Update-AppveyorTest -Name "Pester" -Outcome Passed
       }
+
+  - ps: |
+      Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue

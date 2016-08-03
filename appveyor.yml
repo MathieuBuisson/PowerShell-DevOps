@@ -7,8 +7,8 @@ skip_commits:
   message: /readme*/
 
 install:
-  - ps: Write-Host "Build version :\\ $env:APPVEYOR_BUILD_VERSION"
-  - ps: Write-Host "Branch        :\\ $env:APPVEYOR_REPO_BRANCH"
+  - ps: Write-Host "Build version :`  $env:APPVEYOR_BUILD_VERSION"
+  - ps: Write-Host "Branch        :`  $env:APPVEYOR_REPO_BRANCH"
   - ps: Install-PackageProvider -Name NuGet -Force
   - ps: Install-Module -Name Pester -Force
   - ps: Install-Module PsScriptAnalyzer -Force

@@ -12,9 +12,6 @@ Describe "Testing rule Measure-PascalCase against ExampleScript.ps1" {
             @{ ExpectedViolation  = 'UWFEnabled' }
     )
 
-    It "Should return 6 violations" {
-        $ExampleResults.Count | Should Be 6
-    }
     It "Detected violations should contain <ExpectedViolation>" -TestCases $TestCases {
         Param($ExpectedViolation)
         $VariableNames -contains $ExpectedViolation | Should Be $True

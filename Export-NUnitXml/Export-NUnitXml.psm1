@@ -73,7 +73,7 @@
         Foreach ( $Result in $ScriptAnalyzerResult ) {
             
             $TestDescription = "Rule name : $($Result.RuleName)"
-            $TestName = "PSScriptAnalyzer.{0} - Line {1}" -f $TestDescription,$($Result.Line.ToString())
+            $TestName = "PSScriptAnalyzer.{0} - {1} - Line {2}" -f $TestDescription,$($Result.ScriptName),$($Result.Line.ToString())
 
             $TestCase = @"
           <test-case description="$TestDescription" name="$TestName" time="0.0" asserts="0" success="False" result="Failure" executed="True">

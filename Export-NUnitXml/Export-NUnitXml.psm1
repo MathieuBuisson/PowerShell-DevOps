@@ -3,6 +3,10 @@
 <#
 .SYNOPSIS
     Takes results from PSScriptAnalyzer and exports them as a Pester test results file (NUnitXml format).
+
+.DESCRIPTION
+    Takes results from PSScriptAnalyzer and exports them as a Pester test results file (NUnit XML schema).
+    Because the generated file in NUnit-compatible, it can be consumed and published by most continuous integration tools.
 #>
     [CmdletBinding()]
     Param (

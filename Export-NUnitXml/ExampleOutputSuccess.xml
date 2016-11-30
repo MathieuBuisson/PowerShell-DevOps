@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="PSScriptAnalyzer" total="1" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2016-11-30" time="18:00:09">
-  <environment user="mbuisson" machine-name="OV-DUB-LTP-028" cwd="C:\GitHub\PowerShell-DevOps" user-domain="MAT" platform="Microsoft Windows 10 Pro" nunit-version="2.5.8.0" os-version="10.0.10586" clr-version="4.0.30319.42000" />
+  <environment user="mbuisson" machine-name="Laptop" cwd="C:\GitHub\PowerShell-DevOps" user-domain="MAT" platform="Microsoft Windows 10 Pro" nunit-version="2.5.8.0" os-version="10.0.10586" clr-version="4.0.30319.42000" />
   <culture-info current-culture="en-IE" current-uiculture="en-US" />
   <test-suite type="Powershell" name="PSScriptAnalyzer" executed="True" result="Success" success="True" time="0.0" asserts="0">
     <results>

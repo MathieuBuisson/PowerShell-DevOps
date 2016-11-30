@@ -1,106 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="PSScriptAnalyzer" total="11" errors="0" failures="11" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2016-11-22" time="17:57:05">
-  <environment user="mbuisson" machine-name="OV-DUB-LTP-028" cwd="O:\" user-domain="MAT" platform="Microsoft Windows 10 Pro" nunit-version="2.5.8.0" os-version="10.0.10586" clr-version="4.0.30319.42000" />
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="PSScriptAnalyzer" total="4" errors="0" failures="4" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2016-11-30" time="18:02:55">
+  <environment user="mbuisson" machine-name="OV-DUB-LTP-028" cwd="C:\GitHub\PowerShell-DevOps" user-domain="MAT" platform="Microsoft Windows 10 Pro" nunit-version="2.5.8.0" os-version="10.0.10586" clr-version="4.0.30319.42000" />
   <culture-info current-culture="en-IE" current-uiculture="en-US" />
   <test-suite type="Powershell" name="PSScriptAnalyzer" executed="True" result="Failure" success="False" time="0.0" asserts="0">
     <results>
       <test-suite type="TestFixture" name="PSScriptAnalyzer" executed="True" result="Failure" success="False" time="0.0" asserts="0" description="PSScriptAnalyzer">
         <results>
-          <test-case description="Rule name : PSUseShouldProcessForStateChangingFunctions" name="PSScriptAnalyzer.Rule name : PSUseShouldProcessForStateChangingFunctions" time="0.0" asserts="0" success="False" result="Failure" executed="True">
+          <test-case description="Rule name : PSUseDeclaredVarsMoreThanAssigments" name="PSScriptAnalyzer.Rule name : PSUseDeclaredVarsMoreThanAssigments - ExampleScript.ps1 - Line 49" time="0.0" asserts="0" success="False" result="Failure" executed="True">
             <failure>
-              <message>Function ’Set-TargetResource’ has verb that could change system state. Therefore, the function has to support 'ShouldProcess'.</message>
-              <stack-trace>at line: 26 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\DSCResources\ovDnsRegistration\ovDnsRegistration.psm1 
- 26: Set-TargetResource 
+              <message>The variable 'ScriptFolder' is assigned but never used.</message>
+              <stack-trace>at line: 49 in C:\GitHub\PowerShell-DevOps\CustomPSScriptAnalyzerRules\ExampleScript.ps1 
+ 49: $ScriptFolder 
  Rule severity : Warning
               </stack-trace>
             </failure>
           </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
+          <test-case description="Rule name : PSUseDeclaredVarsMoreThanAssigments" name="PSScriptAnalyzer.Rule name : PSUseDeclaredVarsMoreThanAssigments - ExampleScript.ps1 - Line 117" time="0.0" asserts="0" success="False" result="Failure" executed="True">
             <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 1 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 1: $Global:DSCResourceName 
+              <message>The variable 'UWFEnabled' is assigned but never used.</message>
+              <stack-trace>at line: 117 in C:\GitHub\PowerShell-DevOps\CustomPSScriptAnalyzerRules\ExampleScript.ps1 
+ 117: $UWFEnabled 
  Rule severity : Warning
               </stack-trace>
             </failure>
           </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
+          <test-case description="Rule name : PSAvoidUsingWMICmdlet" name="PSScriptAnalyzer.Rule name : PSAvoidUsingWMICmdlet - ExampleScript.ps1 - Line 88" time="0.0" asserts="0" success="False" result="Failure" executed="True">
             <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 3 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 3: $Global:DSCResourceName 
+              <message>File 'ExampleScript.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the same tasks as the WMI cmdlets. The CIM cmdlets comply with WS-Management (WSMan) standards and with the Common Information Model (CIM) standard, which enables the cmdlets to use the same techniques to manage Windows computers and those running other operating systems.</message>
+              <stack-trace>at line: 88 in C:\GitHub\PowerShell-DevOps\CustomPSScriptAnalyzerRules\ExampleScript.ps1 
+ 88: Get-WmiObject -Namespace $NAMESPACE -Class UWF_Filter -List 
  Rule severity : Warning
               </stack-trace>
             </failure>
           </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
+          <test-case description="Rule name : PSAvoidUsingWMICmdlet" name="PSScriptAnalyzer.Rule name : PSAvoidUsingWMICmdlet - ExampleScript.ps1 - Line 94" time="0.0" asserts="0" success="False" result="Failure" executed="True">
             <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 3 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 3: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 12 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 12: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 33 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 33: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 35 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 35: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 48 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 48: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 50 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 50: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 62 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 62: $Global:DSCResourceName 
- Rule severity : Warning
-              </stack-trace>
-            </failure>
-          </test-case>
-          <test-case description="Rule name : PSAvoidGlobalVars" name="PSScriptAnalyzer.Rule name : PSAvoidGlobalVars" time="0.0" asserts="0" success="False" result="Failure" executed="True">
-            <failure>
-              <message>Found global variable 'Global:DSCResourceName'.</message>
-              <stack-trace>at line: 64 in C:\Git\Deployment\DeploymentServer\App_Data\DscModules\ovDnsRegistration\Tests\Unit\ovDnsRegistration.Tests.ps1 
- 64: $Global:DSCResourceName 
+              <message>File 'ExampleScript.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the same tasks as the WMI cmdlets. The CIM cmdlets comply with WS-Management (WSMan) standards and with the Common Information Model (CIM) standard, which enables the cmdlets to use the same techniques to manage Windows computers and those running other operating systems.</message>
+              <stack-trace>at line: 94 in C:\GitHub\PowerShell-DevOps\CustomPSScriptAnalyzerRules\ExampleScript.ps1 
+ 94: Get-WmiObject -Namespace $NAMESPACE -Class UWF_Filter 
  Rule severity : Warning
               </stack-trace>
             </failure>

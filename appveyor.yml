@@ -16,6 +16,7 @@ build: false
 
 test_script:
   - ps: |
+      Import-Module -Name 'PsScriptAnalyzer' -Force
       Import-Module ".\Export-NUnitXml\Export-NUnitXml.psm1" -Force
       Export-NUnitXml -ScriptAnalyzerResult $Null -Path ".\ScriptAnalyzerResult.xml"
 

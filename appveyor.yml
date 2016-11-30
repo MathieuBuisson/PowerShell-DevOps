@@ -22,6 +22,7 @@ test_script:
         $ScriptAnalyzerResultString = $ScriptAnalyzerResult | Out-String
         Write-Warning $ScriptAnalyzerResultString
       }
+      Import-Module ".\Export-NUnitXml\Export-NUnitXml.psm1" -Force
       Export-NUnitXml -ScriptAnalyzerResult $ScriptAnalyzerResult -Path ".\ScriptAnalyzerResult.xml"
 
       (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\ScriptAnalyzerResult.xml))

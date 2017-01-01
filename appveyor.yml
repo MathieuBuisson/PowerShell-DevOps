@@ -18,7 +18,7 @@ test_script:
   - ps: |
       Import-Module -Name 'PsScriptAnalyzer' -Force
       $ScriptAnalyzerRules = Get-ScriptAnalyzerRule -Severity Error
-      $ScriptAnalyzerResult = Invoke-ScriptAnalyzer -Path ".\CustomPSScriptAnalyzerRules\ExampleScript.ps1" -IncludeRule $ScriptAnalyzerRules
+      $ScriptAnalyzerResult = Invoke-ScriptAnalyzer -Path $pwd -IncludeRule $ScriptAnalyzerRules -Recurse
       If ( $ScriptAnalyzerResult ) {
 
         $ScriptAnalyzerResultString = $ScriptAnalyzerResult | Out-String

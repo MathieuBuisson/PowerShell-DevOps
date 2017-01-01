@@ -17,7 +17,20 @@ build: false
 test_script:
   - ps: |
       Import-Module -Name 'PsScriptAnalyzer' -Force
+      $ScriptAnalyzerRules = Get-ScriptAnalyzerRule -Severity Error
+      $ScriptAnalyzerResult = Invoke-ScriptAnalyzer -Path ".\CustomPSScriptAnalyzerRules\ExampleScript.ps1" -IncludeRule $ScriptAnalyzerRules
+      If ( $ScriptAnalyzerResult ) {
+
+        $ScriptAnalyzerResultString = $ScriptAnalyzerResult | Out-String
+        Write-Warning $ScriptAnalyzerResultString
+      }
       Import-Module ".\Export-NUnitXml\Export-NUnitXml.psm1" -Force
-      Export-NUnitXml -ScriptAnalyzerResult $Null -Path ".\ScriptAnalyzerResult.xml"
+      Export-NUnitXml -ScriptAnalyzerResult $ScriptAnalyzerResult -Path ".\ScriptAnalyzerResult.xml"
 
       (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\ScriptAnalyzerResult.xml))
+
+      If ( $ScriptAnalyzerResult ) {
+        # Failing the build
+        Throw 'Build failed because there was one or more PSScriptAnalyzer violation. See test results for more information.'
+      }
+

@@ -1,3 +1,7 @@
+# Ensuring PSScriptAnalyzer ignores the use of Invoke-Expression
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '')]
+param()
+
 $ModuleName = 'Merge-DscConfigData'
 Remove-Module -Name $ModuleName
 Import-Module "$($PSScriptRoot)\..\..\$($ModuleName).psm1" -Force

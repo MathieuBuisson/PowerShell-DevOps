@@ -3,7 +3,9 @@
 param()
 
 $ModuleName = 'Merge-DscConfigData'
-Remove-Module -Name $ModuleName
+If ( Get-Module -Name $ModuleName ) {
+    Remove-Module -Name $ModuleName
+}
 Import-Module "$($PSScriptRoot)\..\..\$($ModuleName).psm1" -Force
 $TestBaseConfigData = @'
 @{ 

@@ -7,48 +7,6 @@ If ( Get-Module -Name $ModuleName ) {
     Remove-Module -Name $ModuleName
 }
 Import-Module "$($PSScriptRoot)\..\..\$($ModuleName).psm1" -Force
-$TestBaseConfigData = @'
-@{ 
-    # Node specific data 
-    AllNodes = @( 
-       # Common settings for all nodes  
-       @{ 
-            NodeName = '*'
-            PSDscAllowPlainTextPassword = $True
-            ServicesEndpoint = 'http://localhost/Services/'
-            DefaultLogLevel = 'Debug'
-            KeepLatestBuilds = 6
-       }
-    );
-}
-'@
-$TestBaseConfig = $TestBaseConfigData | Invoke-Expression
-
-$TestOverrideConfigData = @'
-@{ 
-    # Node specific data 
-    AllNodes = @( 
-       @{ 
-            NodeName = '*'
-            LocalAdministrators = 'MyLocalUser'
-            DefaultLogLevel = 'Info'
-       },
-       @{
-            NodeName = 'Server1'
-            Role = 'Primary'
-       },
-       @{
-            NodeName = 'Server2'
-            Role = 'Secondary'
-            DefaultLogLevel = 'Info'
-            KeepLatestBuilds = 3
-       }
-    );
-}
-'@
-$TestOverrideConfig = $TestOverrideConfigData | Invoke-Expression
-
-$NodesNotAlreadyPresentInBaseConfig = Compare-Object $TestBaseConfig.AllNodes.NodeName $TestOverrideConfig.AllNodes.NodeName
 
 Describe 'General Module behaviour' {
        
@@ -62,16 +20,53 @@ Describe 'General Module behaviour' {
 }
 Describe 'Merge-DscConfigData' {
     
-    Context 'General Function behaviour' {
+    InModuleScope $ModuleName {
+        
+        $TestBaseConfigData = @'
+        @{ 
+            # Node specific data 
+            AllNodes = @( 
+               # Common settings for all nodes  
+               @{ 
+                    NodeName = '*'
+                    PSDscAllowPlainTextPassword = $True
+                    ServicesEndpoint = 'http://localhost/Services/'
+                    DefaultLogLevel = 'Debug'
+                    KeepLatestBuilds = 6
+               }
+            );
+        }
+'@
+        $TestBaseConfig = $TestBaseConfigData | Invoke-Expression
+
+        $TestOverrideConfigData = @'
+        @{ 
+            # Node specific data 
+            AllNodes = @( 
+               @{ 
+                    NodeName = '*'
+                    LocalAdministrators = 'MyLocalUser'
+                    DefaultLogLevel = 'Info'
+               },
+               @{
+                    NodeName = 'Server1'
+                    Role = 'Primary'
+               },
+               @{
+                    NodeName = 'Server2'
+                    Role = 'Secondary'
+                    DefaultLogLevel = 'Info'
+                    KeepLatestBuilds = 3
+               }
+            );
+        }
+'@
+        $TestOverrideConfig = $TestOverrideConfigData | Invoke-Expression
+        $NodesNotAlreadyPresentInBaseConfig = Compare-Object $TestBaseConfig.AllNodes.NodeName $TestOverrideConfig.AllNodes.NodeName
                 
-        Mock -ModuleName $ModuleName Get-Content {
-            return $TestBaseConfigData } -ParameterFilter {$Path -eq 'TestBase'}
-
-        Mock -ModuleName $ModuleName Get-Content {
-            return [string]::Empty } -ParameterFilter {$Path -eq 'TestEmpty'}
-
-        Mock -ModuleName $ModuleName Get-Content {
-            return $TestOverrideConfigData } -ParameterFilter {$Path -eq 'TestsOverride'}
+        Mock Get-Content { return [string]::Empty } -ParameterFilter {$Path -eq 'TestEmpty'}
+        Mock Get-Content { return $TestBaseConfigData } -ParameterFilter {$Path -eq 'TestBase'}
+        Mock Get-Content { return $TestOverrideConfigData } -ParameterFilter {$Path -eq 'TestsOverride'}
 
         $Output = Merge-DscConfigData -BaseConfigFilePath 'TestBase' -OverrideConfigFilePath 'TestsOverride'
 

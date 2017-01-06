@@ -73,6 +73,9 @@ Function Merge-DscConfigData {
         }
     }
     $MergedConfig = $BaseConfig
-    $MergedConfig.AllNodes = $BaseNodes
+
+    # Converting AllNodes back to an [array] because PSDesiredStateConfiguration doesn't accept an [ArrayList]
+    $NodesBackToArray = $BaseNodes -as [array]
+    $MergedConfig.AllNodes = $NodesBackToArray
     return $MergedConfig
 }

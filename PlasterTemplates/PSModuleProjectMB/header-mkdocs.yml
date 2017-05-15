@@ -1,0 +1,8 @@
+site_name: <%= $PLASTER_PARAM_ModuleName %>
+repo_url: https://github.com/MathieuBuisson/<%= $PLASTER_PARAM_GitHubRepo %>
+site_author: <%= $PLASTER_PARAM_FullName %>
+edit_uri: edit/master/docs/
+theme: readthedocs
+copyright: "<%= $PLASTER_PARAM_GitHubRepo %> is licensed under the <a href='https://github.com/MathieuBuisson/<%= $PLASTER_PARAM_GitHubRepo %>/raw/master/LICENSE.md'>MIT license"
+pages:
+  - Home: index.md

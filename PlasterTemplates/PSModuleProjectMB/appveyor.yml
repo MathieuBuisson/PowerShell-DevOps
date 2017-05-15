@@ -1,0 +1,20 @@
+version: 0.1.{build}
+
+os: WMF 5
+
+environment:
+  Coveralls_Key:
+    secure: 
+  GitHub_Key:
+    secure: wtrwAJK+i7Ar5L8TXeXOUtsxmVD+2wXu9u9bOf6GRfPP0Xn2V4yqTatLwaT7VWA6
+
+before_build:
+  - ps: Write-Host "Build version :`  $env:APPVEYOR_BUILD_VERSION"
+  - ps: Write-Host "Branch        :`  $env:APPVEYOR_REPO_BRANCH"
+  - ps: Install-PackageProvider -Name NuGet -Force
+  - ps: Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+  - ps: Install-Module InvokeBuild -Scope CurrentUser -AllowClobber -Force
+  - ps: Import-Module InvokeBuild
+
+build_script:
+  - ps: Invoke-Build

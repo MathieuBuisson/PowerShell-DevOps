@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.0" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>PSModuleProjectMB</name>
+    <id>0d01c1b8-ca0c-48cd-9322-920dad8dbbb7</id>
+    <version>0.0.1</version>
+    <title>Template for PowerShell module project</title>
+    <description></description>
+    <author>Mathieu Buisson</author>
+    <tags></tags>
+  </metadata>
+  <parameters>
+    <parameter name="FullName" type="text" prompt="Module author's' name" />
+    <parameter name="ModuleName" type="text" prompt="Name of your module" />
+    <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
+    <parameter name="GitHubRepo" type="text" prompt="Github repo name for this module" default="${PLASTER_PARAM_ModuleName}"/>
+  </parameters>
+  <content>
+    <message>      Creating folder structure    </message>
+    <file source='' destination='.github'/>
+    <file source='' destination='Examples'/>
+    <file source='' destination='docs\Functions'/>
+    <file source='' destination='Tests\Integration'/>
+    <file source='' destination='Tests\TestData'/>
+    <file source='' destination='Tests\Unit\Public'/>
+    <file source='' destination='Tests\Unit\Private'/>
+    <file source='' destination='${PLASTER_PARAM_ModuleName}\Public'/>
+    <file source='' destination='${PLASTER_PARAM_ModuleName}\Private'/>
+    <message>      Deploying common files    </message>
+    <file source='.gitignore' destination=''/>
+    <file source='appveyor.yml' destination=''/>
+    <file source='build.ps1' destination='${PLASTER_PARAM_ModuleName}.build.ps1'/>
+    <templateFile source='BuildSettings.ps1' destination='${PLASTER_PARAM_ModuleName}.BuildSettings.ps1'/>
+    <templateFile source='header-mkdocs.yml' destination=''/>
+    <templateFile source='LICENSE.md' destination=''/>
+    <templateFile source='README.md' destination=''/>
+    <templateFile source='.github\CONTRIBUTING.md' destination='.github\CONTRIBUTING.md'/>
+    <file source='.github\ISSUE_TEMPLATE.md' destination='.github\ISSUE_TEMPLATE.md'/>
+    <file source='.github\PULL_REQUEST_TEMPLATE.md' destination='.github\PULL_REQUEST_TEMPLATE.md'/>
+    <templateFile source='docs\index.md' destination='docs\index.md'/>
+    <file source='Module\Module.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>
+    <templateFile source='Tests\Module.Tests.ps1' destination='Tests\Unit\Public\${PLASTER_PARAM_ModuleName}.Tests.ps1'/>
+    <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='0.1.0' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc' encoding='UTF8-NoBOM'/>
+  </content>
+</plasterManifest>

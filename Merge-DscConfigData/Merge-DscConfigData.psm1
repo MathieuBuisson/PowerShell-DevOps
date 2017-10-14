@@ -55,11 +55,11 @@ Function Merge-DscConfigData {
                         $KeyExistsInBaseNode = $NodeInBaseConfig.ContainsKey($OverrideSettingKey)
         
                         If ( $KeyExistsInBaseNode ) {
-                            Write-Verbose "The setting $OverrideSettingKey is present in the base config, overriding its value."
+                            Write-Verbose "$($NodeInBaseConfig.NodeName).$OverrideSettingKey, in node $($NodeInBaseConfig.NodeName) is present in the base config, overriding its value."
                             $NodeInBaseConfig.$($OverrideSettingKey) = $Node.$($OverrideSettingKey)
                         }
                         Else {
-                            Write-Verbose "The setting $OverrideSettingKey is absent in the base config, adding it."
+                            Write-Verbose "The setting $OverrideSettingKey, in node $($NodeInBaseConfig.NodeName) is absent in the base config, adding it."
                             $NodeInBaseConfig.add($OverrideSettingKey, $Node.$($OverrideSettingKey))
                         }
                     }

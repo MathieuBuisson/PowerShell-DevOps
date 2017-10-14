@@ -7,7 +7,9 @@ Function Merge-DscConfigData {
         [string]$BaseConfigFilePath,
 
         [Parameter(Mandatory=$True,Position=1)]
-        [string]$OverrideConfigFilePath
+        [string]$OverrideConfigFilePath,
+
+        [boolean]$MergeNonNodeData = $false
     )
 
     $BaseConfigText = (Get-Content $BaseConfigFilePath | Out-String).Trim()
@@ -69,6 +71,35 @@ Function Merge-DscConfigData {
                     Write-Verbose "The node $($Node.NodeName) is absent in the base config, adding it."
                     $Null = $BaseNodes.Add($Node)
                 }
+            }
+			
+            if ($MergeNonNodeData) {
+
+              if ($OverrideConfig.NonNodeData -ne $null) {
+
+                if ($BaseConfig.NonNodeData -eq $null) {
+                
+                  # Use NonNodeData, in its entirety, from the Override configuration if NonNodeData does not exist in the Base configuration
+                  $BaseConfig.NonNodeData = $OverrideConfig.NonNodeData
+
+                } else {
+
+                  foreach ($NonNodeSetting in $OverrideConfig.NonNodeData.GetEnumerator()) {
+        
+                    # Checking if the setting already exists in the Base config
+                    if ($BaseConfig.NonNodeData.ContainsKey($NonNodeSetting.name))
+                    {
+                      Write-Verbose -Message "The setting $($NonNodeSetting.name) is present in the base config, overring its value."
+                      $BaseConfig.NonNodeData.Set_Item($NonNodeSetting.Name, $NonNodeSetting.value)
+                    }
+                    else 
+                    {
+                      Write-Verbose -Message "The setting $($NonNodeSetting.name) is absent in the base config, ading it."
+                      $BaseConfig.NonNodeData.Add($NonNodeSetting.Name, $NonNodeSetting.value)
+                    }
+                  }
+                }
+              }
             }
             $MergedConfig = $BaseConfig
             # Converting AllNodes back to an [array] because PSDesiredStateConfiguration doesn't accept an [ArrayList]

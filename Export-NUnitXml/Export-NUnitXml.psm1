@@ -1,6 +1,5 @@
-﻿Function Export-NUnitXml
-{
-<#
+﻿Function Export-NUnitXml {
+    <#
 .SYNOPSIS
     Takes results from PSScriptAnalyzer and exports them as a Pester test results file (NUnitXml format).
 
@@ -10,11 +9,11 @@
 #>
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory=$True,Position=0)]
+        [Parameter(Mandatory = $True, Position = 0)]
         [AllowNull()]
         [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]$ScriptAnalyzerResult,
 
-        [Parameter(Mandatory=$True,Position=1)]
+        [Parameter(Mandatory = $True, Position = 1)]
         [string]$Path
     )
 
@@ -34,8 +33,7 @@
     $CurrentCulture = (Get-Culture).Name
     $UICulture = (Get-UICulture).Name
 
-    switch ($ScriptAnalyzerResult)
-    {
+    switch ($ScriptAnalyzerResult) {
         $Null { $TestResult = 'Success'; $TestSuccess = 'True'; Break}
         Default { $TestResult = 'Failure'; $TestSuccess = 'False'}
     }
@@ -58,45 +56,49 @@
   </test-suite>
 </test-results>
 "@
-    
+
     If ( -not($ScriptAnalyzerResult) ) {
-        
+
         $TestDescription = 'All PowerShell files pass the specified PSScriptAnalyzer rules'
         $TestName = "PSScriptAnalyzer.{0}" -f $TestDescription
 
         $Body = @"
           <test-case description="$TestDescription" name="$TestName" time="0.0" asserts="0" success="True" result="Success" executed="True" />`n
 "@
-    }
-    Else { # $ScriptAnalyzerResult is not null
+    } Else { # $ScriptAnalyzerResult is not null
         $Body = [string]::Empty
         Foreach ( $Result in $ScriptAnalyzerResult ) {
-            
+
             $TestDescription = "Rule name : $($Result.RuleName)"
-            $TestName = "PSScriptAnalyzer.{0} - {1} - Line {2}" -f $TestDescription,$($Result.ScriptName),$($Result.Line.ToString())
+            $TestName = "PSScriptAnalyzer.{0} - {1} - Line {2}" -f $TestDescription, $($Result.ScriptName), $($Result.Line.ToString())
+
+            # need to Escape these otherwise we can end up with an invalid XML if the Stacktrace has non XML friendly chars like &, etc
+            $Line = [System.Security.SecurityElement]::Escape($Result.Line)
+            $ScriptPath = [System.Security.SecurityElement]::Escape($Result.ScriptPath)
+            $Text = [System.Security.SecurityElement]::Escape($Result.Extent.Text)
+            $Severity = [System.Security.SecurityElement]::Escape($Result.Severity)
 
             $TestCase = @"
           <test-case description="$TestDescription" name="$TestName" time="0.0" asserts="0" success="False" result="Failure" executed="True">
             <failure>
               <message>$($Result.Message)</message>
-              <stack-trace>at line: $($Result.Line) in $($Result.ScriptPath) 
- $($Result.Line): $($Result.Extent.Text) 
- Rule severity : $($Result.Severity)
+              <stack-trace>at line: $($Line) in $($ScriptPath)
+        $($Line): $($Text)
+ Rule severity : $($Severity)
               </stack-trace>
             </failure>
           </test-case>`n
 "@
-            
+
             $Body += $TestCase
         }
-    }    
+    }
     $OutputXml = $Header + $Body + $Footer
-    
+
     # Checking our output is a well formed XML document
     Try {
         $XmlCheck = [xml]$OutputXml
-    }
-    Catch {
+    } Catch {
         throw "There was an problem when attempting to cast the output to XML : $($_.Exception.Message)"
     }
     $OutputXml | Out-File -FilePath $Path -Encoding utf8 -Force

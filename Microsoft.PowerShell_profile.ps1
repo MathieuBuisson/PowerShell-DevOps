@@ -103,3 +103,6 @@ function ga {
 function gst {
     & git status
 }
+function glp {
+    & git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold green)(%cr) %C(bold yellow)<%an>%Creset' --abbrev-commit
+}

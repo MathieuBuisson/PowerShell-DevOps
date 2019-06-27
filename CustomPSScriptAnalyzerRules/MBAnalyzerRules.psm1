@@ -65,7 +65,7 @@ Function Measure-PascalCase {
                     $Result = New-Object `
                             -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
                             -ArgumentList "$((Get-Help $MyInvocation.MyCommand.Name).Description.Text)",$Violation.Extent,$PSCmdlet.MyInvocation.InvocationName,Information,$Null
-          
+
                     $Results += $Result
                 }
             }

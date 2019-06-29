@@ -1,7 +1,7 @@
 ﻿#Requires -Version 4
 Function Merge-DscConfigData {
     [CmdletBinding()]
-    
+
     Param(
         [Parameter(Mandatory=$True,Position=0)]
         [string]$BaseConfigFilePath,
@@ -36,26 +36,26 @@ Function Merge-DscConfigData {
 
         # Proceeding with the merge only if $OverrideConfig is not null and has been evaluated as a hashtable
         If ( $OverrideConfig -and ($OverrideConfig -is [hashtable]) ) {
-            
+
             #Casting the AllNodes array to a list in order to add elements to it
             $BaseNodes = $BaseConfig.AllNodes -as [System.Collections.ArrayList]
-                        
+
             Foreach ( $Node in $OverrideConfig.AllNodes ) {
-                
+
                 $NodeInBaseConfig = $BaseNodes | Where-Object { $_.NodeName -eq $Node.NodeName }
 
                 If ( $NodeInBaseConfig ) {
-                    
+
                     Write-Verbose "The node $($Node.NodeName) is already present in the base config."
 
                     # Removing the NodeName entry from the current Node to keep only the actual settings
                     $Node.Remove('NodeName')
 
                     Foreach ($OverrideSettingKey in $Node.keys) {
-        
+
                         # Checking if the setting already exists in the Base config
                         $KeyExistsInBaseNode = $NodeInBaseConfig.ContainsKey($OverrideSettingKey)
-        
+
                         If ( $KeyExistsInBaseNode ) {
                             Write-Verbose "$($NodeInBaseConfig.NodeName).$OverrideSettingKey, in node $($NodeInBaseConfig.NodeName) is present in the base config, overriding its value."
                             $NodeInBaseConfig.$($OverrideSettingKey) = $Node.$($OverrideSettingKey)
@@ -67,7 +67,7 @@ Function Merge-DscConfigData {
                     }
                 }
                 Else { # If the node is not already present in the base base config
-                    
+
                     Write-Verbose "The node $($Node.NodeName) is absent in the base config, adding it."
                     $Null = $BaseNodes.Add($Node)
                 }
@@ -78,21 +78,21 @@ Function Merge-DscConfigData {
               if ($OverrideConfig.NonNodeData -ne $null) {
 
                 if ($BaseConfig.NonNodeData -eq $null) {
-                
+
                   # Use NonNodeData, in its entirety, from the Override configuration if NonNodeData does not exist in the Base configuration
                   $BaseConfig.NonNodeData = $OverrideConfig.NonNodeData
 
                 } else {
 
                   foreach ($NonNodeSetting in $OverrideConfig.NonNodeData.GetEnumerator()) {
-        
+
                     # Checking if the setting already exists in the Base config
                     if ($BaseConfig.NonNodeData.ContainsKey($NonNodeSetting.name))
                     {
                       Write-Verbose -Message "The setting $($NonNodeSetting.name) is present in the base config, overring its value."
                       $BaseConfig.NonNodeData.Set_Item($NonNodeSetting.Name, $NonNodeSetting.value)
                     }
-                    else 
+                    else
                     {
                       Write-Verbose -Message "The setting $($NonNodeSetting.name) is absent in the base config, ading it."
                       $BaseConfig.NonNodeData.Add($NonNodeSetting.Name, $NonNodeSetting.value)

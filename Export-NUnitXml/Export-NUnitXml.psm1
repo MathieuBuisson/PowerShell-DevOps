@@ -29,9 +29,15 @@
     $OS = Get-CimInstance -ClassName Win32_OperatingSystem
     $Platform = $OS.Caption
     $OSVersion = $OS.Version
-    $ClrVersion = $PSVersionTable.CLRVersion.ToString()
+    $ClrVersion = 'Unknown'
     $CurrentCulture = (Get-Culture).Name
     $UICulture = (Get-UICulture).Name
+    
+    # This has been deprecated with PS Core and is only kept for compatbility
+    # See https://github.com/PowerShell/PowerShell/issues/1395
+    if ($PSVersionTable.CLRVersion) {
+        $ClrVersion = $PSVersionTable.CLRVersion.ToString()
+    }
 
     Switch ($ScriptAnalyzerResult) {
         $Null { $TestResult = 'Success'; $TestSuccess = 'True'; Break}
